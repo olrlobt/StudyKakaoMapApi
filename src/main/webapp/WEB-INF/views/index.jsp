@@ -9,6 +9,8 @@
 <body>
 	<div id="map" style="width: 1000px; height: 800px;"></div> 
 	
+	<a href="/maps/building"> maps gogo</a>
+	
 	﻿<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>﻿
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=18190dd1b0d3a9e9dd177bd472b03d20&libraries=clusterer"></script>
 	<script type="text/javascript">
@@ -26,7 +28,7 @@
 		
 		var positions = [
 		    {
-		        title: '안양역', 
+		        'title': '안양역', 
 		        "lat": 37.402707,
 		      	"lng": 126.922044
 		    },
@@ -47,10 +49,19 @@
 		    }
 		];
 		
+		var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png', // 마커이미지의 주소 
+	    imageSize = new kakao.maps.Size(64, 69), // 마커이미지의 크기입니다
+	    imageOption = {offset: new kakao.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+		      
+		// 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
+		var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption)
+		   
 			
 		var markers = positions.map(function(position) {  // 마커를 배열 단위로 묶음
 		    return new kakao.maps.Marker({
-		        position : new kakao.maps.LatLng(position.lat, position.lng)
+		        position : new kakao.maps.LatLng(position.lat, position.lng),
+		    	title : position.title,
+// 		    	image : markerImage
 		    });
 		});
 		
@@ -62,12 +73,30 @@
 	    });
 		
 		
-		var marker = new kakao.maps.Marker({
-		    position: new kakao.maps.LatLng( 37.389794,126.950768 )
+		var iwContent = '<div style="padding:5px;">Hello World! <br><a href="https://map.kakao.com/link/map/Hello World!,33.450701,126.570667" style="color:blue" target="_blank">큰지도보기</a> <a href="https://map.kakao.com/link/to/Hello World!,33.450701,126.570667" style="color:blue" target="_blank">길찾기</a></div>'; // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+		
+		var infowindow = positions.map(function(position) {  // 마커를 배열 단위로 묶음
+		    return new kakao.maps.InfoWindow({
+			    position : new kakao.maps.LatLng(position.lat, position.lng),
+			    content : iwContent 
+			});
 		});
+		
+// 		infowindow.open(map, marker); 
+		
+		markers.map(function(o){
+			
+			var infowindow = new kakao.maps.InfoWindow({
+			    content : '<div style="padding:5px;">' + o.Gb + '</div>'
+			});
+			
+			infowindow.open(map, o);
+		});
+		
+		
 
-		clusterer.addMarker(marker);
-		clusterer.removeMarker(marker);
+// 		clusterer.addMarker(marker);
+// 		clusterer.removeMarker(marker);
 	
 	</script>
 </body>
